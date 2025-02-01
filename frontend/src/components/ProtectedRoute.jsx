@@ -1,29 +1,35 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react';
+import axios from '../config/axios';
 import Login from '../pages/Login';
-import Home from '../pages/Home';
-import toast from 'react-hot-toast';
+import Loader from './Loader';
 
-const ProtectedRoute = () => {
-
-    const [isTokenPresent, setisTokenPresent] = useState(false)
+const ProtectedRoute = ({ component }) => {
+    const [isAuthUser, setIsAuthUser] = useState(true);
+    const [isToken, setIsToken] = useState(true);
 
     const checkToken = () => {
         const token = localStorage.getItem('token');
-        toast('token not present')
-        setisTokenPresent(token ? true : false);
+        token ? setIsToken(true) : setIsToken(false);
     }
+
+    const checkUserLoginStatus = async () => {
+        try {
+            const response = await axios.get('/auth/check');
+            if (response.data.statusCode === 200 && response.data.data) setIsAuthUser(true);
+            else setIsAuthUser(false);
+        } catch (err) {
+            setIsAuthUser(false);
+        }
+    };
 
     useEffect(() => {
-        checkToken();
-    }, [])
+        // checkToken();
+        checkUserLoginStatus();
+    }, []);
 
-    if (!isTokenPresent) {
-        return <Login />
-    }
+    if (!isAuthUser) return <Login />
 
-    return (
-        <Home />
-    )
-}
+    return component;
+};
 
 export default ProtectedRoute
