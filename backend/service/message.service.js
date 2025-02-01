@@ -1,5 +1,6 @@
 import { uploadToCloudinary } from "../config/cloudinary.config.js";
 import Message from "../models/message.model.js";
+import { getReceiverSocketId } from "../socket.js";
 
 class MessageService {
     static getMessageByUserId = async (currentUserId, otherUserId) => {
@@ -24,12 +25,16 @@ class MessageService {
                 const uploadResult = await uploadToCloudinary(image);
                 imageUrl = uploadResult.secure_url;
             }
-            return await Message.create({
+            const newMessage = await Message.create({
                 senderId,
                 recieverId,
                 image: imageUrl,
                 text
             })
+            const receiverSocketId = getReceiverSocketId(recieverId);
+            if (receiverSocketId) {
+                io.to(receiverSocketId).emit("newMessage", newMessage);
+            }
         } catch (err) {
             return null;
         }

@@ -53,7 +53,7 @@ export const logout = (req, res) => {
     }
 }
 
-export const getAllUsers = async (req, res) => {
+export const getAllUsersForSidebar = async (req, res) => {
     try {
         const user = req.user;
         const users = await UserService.getAllDatabaseUsersExceptMe(user.id);
@@ -62,5 +62,13 @@ export const getAllUsers = async (req, res) => {
         return res.status(200).json(new ApiResponse(200, true, 'success', users));
     } catch (err) {
         return res.status(500).json(new ApiResponse(500, false, err.message || 'server-error'));
+    }
+}
+
+export const checkAuth = async (req, res) => {
+    try {
+        return res.status(200).json(new ApiResponse(200, true, 'success', req.user))
+    } catch (err) {
+        return res.status(500).json(new ApiResponse(500, false, err.message || 'server-error'))
     }
 }

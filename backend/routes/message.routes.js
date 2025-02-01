@@ -4,7 +4,8 @@ import { getMessageById, sendMessage } from '../controllers/message.controller.j
 
 const messageRouter = express.Router();
 
-messageRouter.get('/message/:id', authMiddleware, getMessageById)
+messageRouter.get('/:id', authMiddleware, getMessageById)
+messageRouter.get('/users', authMiddleware, getMessageById)
 messageRouter.post('/send-message/:id', authMiddleware, sendMessage)
 
 export default messageRouter;
