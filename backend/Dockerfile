@@ -1,0 +1,13 @@
+FROM node
+
+WORKDIR /usr/backend-app
+
+COPY package*.json .
+
+RUN npm install
+
+COPY . .
+
+EXPOSE 4000:4000
+
+CMD [ "npm", "start" ]
