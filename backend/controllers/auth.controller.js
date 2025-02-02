@@ -17,7 +17,13 @@ export const login = async (req, res) => {
             return res.status(400).json(new ApiResponse(400, false, 'invalid credentials'))
 
         const token = generateJwtToken(user, res);
-        return res.status(200).json(new ApiResponse(200, true, 'success', token))
+        return res.status(200).json(new ApiResponse(200, true, 'success', {
+            _id: user._id,
+            firstName: user.firstName,
+            lastName: user.lastName,
+            email: user.email,
+            profilePic: user.profilePic
+        }))
     } catch (err) {
         return res.status(500).json(new ApiResponse(500, false, err.message || 'server-error'))
     }
@@ -38,7 +44,13 @@ export const signUp = async (req, res) => {
             return res.status(500).json(new ApiResponse(500, false, 'error creating user'))
         }
         const token = generateJwtToken(user, res);
-        return res.status(200).json(new ApiResponse(200, true, 'success', token))
+        return res.status(200).json(new ApiResponse(200, true, 'success', {
+            _id: user._id,
+            firstName: user.firstName,
+            lastName: user.lastName,
+            email: user.email,
+            profilePic: user.profilePic
+        }))
     } catch (err) {
         return res.status(500).json(new ApiResponse(500, false, err.message || 'server-error'))
     }
