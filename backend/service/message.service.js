@@ -1,7 +1,7 @@
 import { uploadToCloudinary } from "../config/cloudinary.config.js";
 import Message from "../models/message.model.js";
 import { getReceiverSocketId } from "../socket.js";
-
+import { io } from "../index.js";
 class MessageService {
     static getMessageByUserId = async (currentUserId, otherUserId) => {
         try {
