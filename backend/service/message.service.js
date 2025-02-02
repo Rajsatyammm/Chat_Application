@@ -5,7 +5,7 @@ import { io } from "../index.js";
 class MessageService {
     static getMessageByUserId = async (currentUserId, otherUserId) => {
         try {
-            const messages = await Message.find({ senderId: currentUserId, recieverId: otherUserId })
+            const messages = await Message
                 .find({
                     $or: [
                         { senderId: currentUserId, recieverId: otherUserId },
