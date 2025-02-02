@@ -7,6 +7,7 @@ import Signup from './pages/Signup'
 import ProtectedRoute from './components/ProtectedRoute'
 import { Toaster } from 'react-hot-toast'
 import ProfilePage from './pages/ProfilePage'
+import SettingsPage from './pages/SettingsPage'
 
 function App() {
 
@@ -18,6 +19,7 @@ function App() {
         <Route path='/login' element={<Login />} />
         <Route path='/signup' element={<Signup />} />
         <Route path='/profile' element={<ProtectedRoute component={<ProfilePage />} />} />
+        <Route path='/setting' element={<ProtectedRoute component={<SettingsPage />} />} />
       </Routes>
       <Toaster />
     </>
