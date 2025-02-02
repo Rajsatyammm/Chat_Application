@@ -19,7 +19,7 @@ function App() {
         <Route path='/login' element={<Login />} />
         <Route path='/signup' element={<Signup />} />
         <Route path='/profile' element={<ProtectedRoute component={<ProfilePage />} />} />
-        <Route path='/setting' element={<ProtectedRoute component={<SettingsPage />} />} />
+        <Route path='/settings' element={<ProtectedRoute component={<SettingsPage />} />} />
       </Routes>
       <Toaster />
     </>
