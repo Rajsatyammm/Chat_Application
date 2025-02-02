@@ -58,7 +58,7 @@ export const signUp = async (req, res) => {
 
 export const logout = (req, res) => {
     try {
-        res.cookie('jwtToken', '', { expiresIn: 0 })
+        res.cookie('token', '', { expiresIn: 0 })
         return res.status(200).json(new ApiResponse(200, true, 'success'))
     } catch (err) {
         return res.status(500).json(new ApiResponse(500, false, err.message || 'server-error'))
