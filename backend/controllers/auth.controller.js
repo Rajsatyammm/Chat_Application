@@ -68,7 +68,7 @@ export const logout = (req, res) => {
 export const getAllUsersForSidebar = async (req, res) => {
     try {
         const user = req.user;
-        const users = await UserService.getAllDatabaseUsersExceptMe(user.id);
+        const users = await UserService.getAllDatabaseUsersExceptMe(user._id);
         if (!users)
             return res.status(500).json(new ApiResponse(500, false, 'no user in db'));
         return res.status(200).json(new ApiResponse(200, true, 'success', users));
