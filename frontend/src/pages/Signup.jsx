@@ -1,12 +1,14 @@
 import { useState } from "react";
 import { useAuthStore } from "../store/useAuthStore";
 import { Eye, EyeOff, Loader2, Lock, Mail, MessageSquare, User } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 import AuthImagePattern from "../components/AuthImagePattern";
 import toast from "react-hot-toast";
 
 const Signup = () => {
+    const navigate = useNavigate();
+
     const [showPassword, setShowPassword] = useState(false);
     const [formData, setFormData] = useState({
         firstName: "",
@@ -18,22 +20,29 @@ const Signup = () => {
     const { signup, isSigningUp } = useAuthStore();
 
     const validateForm = () => {
-        if (!formData.firstName.trim()) return toast.error("First name is required");
-        if (!formData.lastName.trim()) return toast.error("Last name is required");
-        if (!formData.email.trim()) return toast.error("Email is required");
-        if (!/\S+@\S+\.\S+/.test(formData.email)) return toast.error("Invalid email format");
-        if (!formData.password) return toast.error("Password is required");
-        if (formData.password.length < 6) return toast.error("Password must be at least 6 characters");
+        if (!formData.firstName.trim()) toast.error("First name is required");
+        if (!formData.lastName.trim()) toast.error("Last name is required");
+        if (!formData.email.trim()) toast.error("Email is required");
+        if (!/\S+@\S+\.\S+/.test(formData.email)) toast.error("Invalid email format");
+        if (!formData.password) toast.error("Password is required");
+        if (formData.password.length < 6) toast.error("Password must be at least 6 characters");
 
         return true;
     };
 
     const handleSubmit = (e) => {
         e.preventDefault();
+        try {
+            const success = validateForm();
+            if (success === true)
+                signup(formData);
+            setTimeout(() => {
+                navigate('/');
+            }, 1000)
+        } catch (err) {
+            toast.error(err.message || 'Error while creating account');
+        }
 
-        const success = validateForm();
-
-        if (success === true) signup(formData);
     };
 
     return (
