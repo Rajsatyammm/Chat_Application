@@ -3,7 +3,7 @@ import ApiResponse from "../utils/api.response.js";
 
 export const getMessageById = async (req, res) => {
     try {
-        const { id: currentUser } = req.user;
+        const { _id: currentUser } = req.user;
         const { id: otherUser } = req.params;
         const allMessages = await MessageService.getMessageByUserId(currentUser, otherUser);
         res.status(200).json(new ApiResponse(200, true, "sucess", allMessages));
@@ -14,7 +14,7 @@ export const getMessageById = async (req, res) => {
 
 export const sendMessage = async (req, res) => {
     try {
-        const senderId = req.user.id;
+        const senderId = req.user._id;
         const { id: recieverId } = req.params;
         const { text, image } = req.body;
         if (!text && !image)
