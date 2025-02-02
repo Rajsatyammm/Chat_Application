@@ -22,6 +22,7 @@ export const sendMessage = async (req, res) => {
         const message = await MessageService.createMessage({ senderId, recieverId, text, image })
         if (!message)
             return res.status(500).json(new ApiResponse(400, false, 'error while sending message'))
+        res.status(201).json(new ApiResponse(200, true, 'success', message))
     } catch (err) {
         return res.status(500).json(new ApiResponse(500, false, err.message || 'server-error'))
     }

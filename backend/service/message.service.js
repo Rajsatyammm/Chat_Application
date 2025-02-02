@@ -35,6 +35,7 @@ class MessageService {
             if (receiverSocketId) {
                 io.to(receiverSocketId).emit("newMessage", newMessage);
             }
+            return newMessage;
         } catch (err) {
             return null;
         }
