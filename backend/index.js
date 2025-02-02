@@ -41,3 +41,5 @@ server.listen(PORT, async () => {
     console.log(`Server running at PORT:${PORT}`)
     await connectToDB();
 });
+
+export { io };
