@@ -6,7 +6,6 @@ export function getReceiverSocketId(userId) {
 
 const socketRequestHandler = (io) => {
     io.on('connection', (socket) => {
-        console.log('a user connected', socket.id)
         const userId = socket.handshake.query.userId;
         if (userId)
             userToSocketMapping[userId] = socket.id;
@@ -14,7 +13,6 @@ const socketRequestHandler = (io) => {
         io.emit("getOnlineUsers", Object.keys(userToSocketMapping));
 
         socket.on("disconnect", () => {
-            console.log("A user disconnected", socket.id);
             delete userToSocketMapping[userId];
             io.emit("getOnlineUsers", Object.keys(userToSocketMapping));
         });
