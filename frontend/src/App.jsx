@@ -8,11 +8,14 @@ import ProtectedRoute from './components/ProtectedRoute'
 import { Toaster } from 'react-hot-toast'
 import ProfilePage from './pages/ProfilePage'
 import SettingsPage from './pages/SettingsPage'
+import { useThemeStore } from './store/useThemeStore'
 
 function App() {
 
+  const { theme } = useThemeStore();
+
   return (
-    <>
+    <div data-theme={theme}>
       <Navbar />
       <Routes>
         <Route path='/' element={<ProtectedRoute component={<Home />} />} />
@@ -22,7 +25,7 @@ function App() {
         <Route path='/settings' element={<ProtectedRoute component={<SettingsPage />} />} />
       </Routes>
       <Toaster />
-    </>
+    </div>
   )
 }
 
