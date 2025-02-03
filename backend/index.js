@@ -9,6 +9,7 @@ import { Server } from 'socket.io'
 import { createServer } from 'http'
 import cors from 'cors';
 import socketRequestHandler from './socket.js';
+import ApiResponse from './utils/api.response.js';
 
 config();
 cloudinaryConfig();
@@ -34,6 +35,9 @@ app.use(cors({
 app.use('/api/auth', authRouter)
 app.use('/api/messages', messageRouter)
 
+app.get('/', (req, res) => {
+    res.status(200).json(new ApiResponse(200, true, 'success'))
+})
 
 const PORT = process.env.PORT || 4000;
 

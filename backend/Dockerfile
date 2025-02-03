@@ -1,10 +1,10 @@
 FROM node
 
-WORKDIR /usr/backend-app
+WORKDIR /app
 
 COPY package*.json .
 
-RUN npm install
+RUN npm ci
 
 COPY . .
 

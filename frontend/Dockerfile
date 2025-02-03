@@ -4,7 +4,7 @@ WORKDIR /usr/frontend-app
 
 COPY package*.json .
 
-RUN npm install
+RUN npm ci
 
 COPY . .
 
