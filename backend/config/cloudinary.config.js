@@ -24,3 +24,27 @@ export const uploadToCloudinary = async (file) => {
         throw error;
     }
 }
+
+export const uploadStreamToCloudinary = (file) => {
+    return new Promise((resolve, reject) => {
+        const stream = cloudinary.uploader.upload_stream(
+            {
+                folder: process.env.CLOUDINARY_FOLDER_NAME,
+                quality: 50,
+                transformation: [
+                    { width: 1000, height: 1000, crop: "limit" }
+                ],
+                resource_type: 'auto'
+            },
+            (error, result) => {
+                if (error) {
+                    console.log('error', error.message);
+                    reject(error);
+                } else {
+                    resolve(result);
+                }
+            }
+        );
+        stream.end(file);
+    });
+}
