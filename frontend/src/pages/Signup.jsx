@@ -5,6 +5,7 @@ import { Link, useNavigate } from "react-router-dom";
 
 import AuthImagePattern from "../components/AuthImagePattern";
 import toast from "react-hot-toast";
+import { getEncryptedStringFromObject } from "../utils/util";
 
 const Signup = () => {
     const navigate = useNavigate();
@@ -34,8 +35,9 @@ const Signup = () => {
         e.preventDefault();
         try {
             const success = validateForm();
+            const encryptedData = getEncryptedStringFromObject({ ...formData, email: formData.email.toLowerCase() });
             if (success === true)
-                signup({ ...formData, email: formData.email.toLowerCase() });
+                signup({ data: encryptedData });
             setTimeout(() => {
                 navigate('/');
             }, 1000)

@@ -1,8 +1,9 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useAuthStore } from "../store/useAuthStore";
 import AuthImagePattern from "../components/AuthImagePattern";
 import { Link, useNavigate } from "react-router-dom";
 import { Eye, EyeOff, Loader, Lock, Mail, MessageSquare } from "lucide-react";
+import { getEncryptedStringFromObject } from "../utils/util";
 
 const Login = () => {
     const [showPassword, setShowPassword] = useState(false);
@@ -14,7 +15,8 @@ const Login = () => {
     const navigate = useNavigate()
     const handleSubmit = async (e) => {
         e.preventDefault();
-        login({ ...formData, email: formData.email.toLowerCase() });
+        const encryptedData = getEncryptedStringFromObject({ ...formData, email: formData.email.toLowerCase() });
+        login({ data: encryptedData });
         navigate('/')
     };
 
