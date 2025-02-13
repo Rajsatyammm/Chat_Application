@@ -14,7 +14,7 @@ const Login = () => {
     const navigate = useNavigate()
     const handleSubmit = async (e) => {
         e.preventDefault();
-        login(formData);
+        login({ ...formData, email: formData.email.toLowerCase() });
         navigate('/')
     };
 

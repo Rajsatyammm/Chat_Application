@@ -35,7 +35,7 @@ const Signup = () => {
         try {
             const success = validateForm();
             if (success === true)
-                signup(formData);
+                signup({ ...formData, email: formData.email.toLowerCase() });
             setTimeout(() => {
                 navigate('/');
             }, 1000)
