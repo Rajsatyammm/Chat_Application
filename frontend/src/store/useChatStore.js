@@ -2,6 +2,7 @@ import { create } from "zustand";
 import toast from "react-hot-toast";
 import axiosInstance from "../config/axios";
 import { useAuthStore } from "./useAuthStore";
+import { getDecryptedObjectFromEncryptedString } from "../utils/util";
 
 export const useChatStore = create((set, get) => ({
     messages: [],
@@ -14,7 +15,7 @@ export const useChatStore = create((set, get) => ({
         set({ isUsersLoading: true });
         try {
             const res = await axiosInstance.get("/auth/users");
-            set({ users: res.data.data });
+            set({ users: getDecryptedObjectFromEncryptedString(res.data.data) });
         } catch (error) {
             toast.error(error.response.data.message);
         } finally {

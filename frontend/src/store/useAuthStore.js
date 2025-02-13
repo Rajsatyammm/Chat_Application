@@ -3,6 +3,7 @@ import { create } from "zustand";
 import axiosInstance from "../config/axios";
 import toast from "react-hot-toast";
 import { io } from "socket.io-client";
+import { getDecryptedObjectFromEncryptedString } from "../utils/util";
 
 // const BASE_URL = import.meta.env.MODE === "development" ? "http://localhost:5001" : "/";
 const BASE_URL = import.meta.env.VITE_SERVER_BASE_URL;
@@ -18,7 +19,7 @@ export const useAuthStore = create((set, get) => ({
     checkAuth: async () => {
         try {
             const res = await axiosInstance.get("/auth/check");
-            set({ authUser: res.data.data });
+            set({ authUser: getDecryptedObjectFromEncryptedString(res.data.data) });
             get().connectSocket();
         } catch (error) {
             set({ authUser: null });
@@ -45,7 +46,7 @@ export const useAuthStore = create((set, get) => ({
         set({ isLoggingIn: true });
         try {
             const res = await axiosInstance.post("/auth/login", data);
-            set({ authUser: res.data.data });
+            set({ authUser: getDecryptedObjectFromEncryptedString(res.data.data) });
             toast.success("Logged in successfully");
 
             get().connectSocket();
