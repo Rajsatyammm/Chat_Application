@@ -1,3 +1,4 @@
+import { uploadToCloudinary } from "../config/cloudinary.config.js";
 import User from "../models/user.model.js"
 import bcrypt from 'bcrypt'
 
@@ -38,7 +39,7 @@ class UserService {
             const newUser = await User.create({
                 firstName,
                 lastName,
-                email,
+                email: email.toLowerCase(),
                 salt: hashedData.salt,
                 password: hashedData.hashedPassword,
                 userName: email.split('@')[0],

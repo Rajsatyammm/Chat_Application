@@ -1,10 +1,14 @@
 import UserService from "../service/user.service.js";
 import ApiResponse from "../utils/api.response.js";
 import { generateJwtToken } from "../utils/jwtUtil.js";
+import { getDecryptedObjectFromEncryptedString, getEncryptedStringFromObject } from "../utils/utils.js";
 
 export const login = async (req, res) => {
     try {
-        const { email, password } = req.body;
+        const { data } = req.body;
+        if (!data)
+            return res.status(400).json(new ApiResponse(400, false, "All fields are required"))
+        const { email, password } = getDecryptedObjectFromEncryptedString(data);
         if (!email || !password)
             return res.status(400).json(new ApiResponse(400, false, "All fields are required"))
 
@@ -17,13 +21,14 @@ export const login = async (req, res) => {
             return res.status(400).json(new ApiResponse(400, false, 'invalid credentials'))
 
         const token = generateJwtToken(user, res);
-        return res.status(200).json(new ApiResponse(200, true, 'success', {
+        const encryptedData = getEncryptedStringFromObject({
             _id: user._id,
             firstName: user.firstName,
             lastName: user.lastName,
             email: user.email,
             profilePic: user.profilePic
-        }))
+        })
+        return res.status(200).json(new ApiResponse(200, true, 'success', encryptedData))
     } catch (err) {
         return res.status(500).json(new ApiResponse(500, false, err.message || 'server-error'))
     }
@@ -31,7 +36,10 @@ export const login = async (req, res) => {
 
 export const signUp = async (req, res) => {
     try {
-        const { firstName, lastName, email, password } = req.body;
+        const { data } = req.body;
+        if (!data)
+            return res.status(400).json(new ApiResponse(400, false, "All fields are required"))
+        const { firstName, lastName, email, password } = getDecryptedObjectFromEncryptedString(data);
         if (!firstName || !lastName || !email || !password)
             return res.status(400).json(new ApiResponse(400, false, 'All fields are required'))
 
@@ -44,13 +52,14 @@ export const signUp = async (req, res) => {
             return res.status(500).json(new ApiResponse(500, false, 'error creating user'))
         }
         const token = generateJwtToken(user, res);
-        return res.status(200).json(new ApiResponse(200, true, 'success', {
+        const encryptedUserData = getEncryptedStringFromObject({
             _id: user._id,
             firstName: user.firstName,
             lastName: user.lastName,
             email: user.email,
             profilePic: user.profilePic
-        }))
+        })
+        return res.status(200).json(new ApiResponse(200, true, 'success', encryptedUserData))
     } catch (err) {
         return res.status(500).json(new ApiResponse(500, false, err.message || 'server-error'))
     }
@@ -71,7 +80,7 @@ export const getAllUsersForSidebar = async (req, res) => {
         const users = await UserService.getAllDatabaseUsersExceptMe(user._id);
         if (!users)
             return res.status(500).json(new ApiResponse(500, false, 'no user in db'));
-        return res.status(200).json(new ApiResponse(200, true, 'success', users));
+        return res.status(200).json(new ApiResponse(200, true, 'success', getEncryptedStringFromObject(users)));
     } catch (err) {
         return res.status(500).json(new ApiResponse(500, false, err.message || 'server-error'));
     }
@@ -79,7 +88,7 @@ export const getAllUsersForSidebar = async (req, res) => {
 
 export const checkAuth = async (req, res) => {
     try {
-        return res.status(200).json(new ApiResponse(200, true, 'success', req.user))
+        return res.status(200).json(new ApiResponse(200, true, 'success', getEncryptedStringFromObject(req.user)))
     } catch (err) {
         return res.status(500).json(new ApiResponse(500, false, err.message || 'server-error'))
     }
