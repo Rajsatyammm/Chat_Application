@@ -78,7 +78,7 @@ const MessageInput = () => {
                         value={text}
                         onChange={(e) => setText(e.target.value)}
                     />
-                    <input
+                    {/* <input
                         type="file"
                         accept="image/*"
                         className="hidden"
@@ -93,7 +93,7 @@ const MessageInput = () => {
                         onClick={() => fileInputRef.current?.click()}
                     >
                         <Image size={20} />
-                    </button>
+                    </button> */}
                 </div>
                 <button
                     type="submit"
