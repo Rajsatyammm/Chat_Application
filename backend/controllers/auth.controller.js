@@ -88,7 +88,7 @@ export const updateProfile = async (req, res) => {
         const updatedUser = await UserService.updateProfile(userId, profilePic);
         if (!updateProfile)
             return res.status(500).json(new ApiResponse(500, false, 'error while updating profile'))
-        return res.status(200).json(new ApiResponse(200, true, 'success', updatedUser));
+        return res.status(200).json(new ApiResponse(200, true, 'success', getEncryptedStringFromObject(updatedUser)));
     } catch (error) {
         console.log("error in update profile:", error);
         return res.status(500).json(new ApiResponse(500, false, "Internal server error"));

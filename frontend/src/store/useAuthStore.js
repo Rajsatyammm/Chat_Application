@@ -3,7 +3,7 @@ import { create } from "zustand";
 import axiosInstance from "../config/axios";
 import toast from "react-hot-toast";
 import { io } from "socket.io-client";
-import { getDecryptedObjectFromEncryptedString } from "../utils/util";
+import { getDecryptedObjectFromEncryptedString, getEncryptedStringFromObject } from "../utils/util";
 
 // const BASE_URL = import.meta.env.MODE === "development" ? "http://localhost:5001" : "/";
 const BASE_URL = import.meta.env.VITE_SERVER_BASE_URL;
@@ -72,9 +72,7 @@ export const useAuthStore = create((set, get) => ({
     fetchProfile: async () => {
         try {
             const response = await axiosInstance.get("/auth/profile")
-            console.log(getDecryptedObjectFromEncryptedString(response.data.data))
             set({ authUser: getDecryptedObjectFromEncryptedString(response.data.data) })
-            console.log('fetchProfile', get().authUser)
         } catch (err) {
             toast.error('Error getting user profile');
         }
@@ -88,7 +86,7 @@ export const useAuthStore = create((set, get) => ({
                     'Content-Type': 'multipart/form-data',
                 }
             });
-            set({ authUser: res.data.data });
+            set({ authUser: getDecryptedObjectFromEncryptedString(res.data.data) });
             toast.success("Profile updated successfully");
         } catch (error) {
             toast.error(error.response.data.message);
