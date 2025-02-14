@@ -1,4 +1,4 @@
-import { uploadToCloudinary } from "../config/cloudinary.config.js";
+import { uploadStreamToCloudinary, uploadToCloudinary } from "../config/cloudinary.config.js";
 import User from "../models/user.model.js"
 import bcrypt from 'bcrypt'
 
@@ -7,6 +7,14 @@ class UserService {
     static getUserByEmail = async (email) => {
         try {
             return await User.findOne({ email: email }).select('+password');
+        } catch (err) {
+            return null;
+        }
+    }
+
+    static getUserById = async (id) => {
+        try {
+            return await User.findOne({ _id: id });
         } catch (err) {
             return null;
         }
@@ -30,6 +38,21 @@ class UserService {
     static matchPassowrd = async (salt, password, dbPassword) => {
         const hashedPassword = await bcrypt.hash(password, salt)
         return dbPassword === hashedPassword;
+    }
+
+    static updateProfile = async (userId, profilePic) => {
+        try {
+            const res = await uploadStreamToCloudinary(profilePic);
+            if (!res) return null;
+            const updatedUser = await User.findByIdAndUpdate(
+                userId,
+                { profilePic: res.secure_url },
+                { new: true }
+            );
+            return updatedUser;
+        } catch (err) {
+            return null;
+        }
     }
 
     static createUser = async (user) => {

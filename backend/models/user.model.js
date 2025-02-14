@@ -1,4 +1,5 @@
 import mongoose from 'mongoose';
+import { DEFAULT_USER_PROFILE_PIC_MALE } from '../utils/constants.js';
 
 const userSchema = new mongoose.Schema({
     firstName: {
@@ -22,6 +23,10 @@ const userSchema = new mongoose.Schema({
     password: {
         type: String,
         select: false
+    },
+    profilePic: {
+        type: String,
+        default: DEFAULT_USER_PROFILE_PIC_MALE
     }
 }, { timestamps: true })
 

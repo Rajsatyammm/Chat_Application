@@ -51,6 +51,7 @@ export const signUp = async (req, res) => {
         if (!user) {
             return res.status(500).json(new ApiResponse(500, false, 'error creating user'))
         }
+        // generate and set jwt token to cookies
         const token = generateJwtToken(user, res);
         const encryptedUserData = getEncryptedStringFromObject({
             _id: user._id,
@@ -64,6 +65,35 @@ export const signUp = async (req, res) => {
         return res.status(500).json(new ApiResponse(500, false, err.message || 'server-error'))
     }
 }
+
+export const getUserProfile = async (req, res) => {
+    try {
+        const userId = req.user._id;
+        const user = await UserService.getUserById(userId);
+        if (!user)
+            return res.status(404).json(new ApiResponse(500, false, "user not found"));
+        return res.status(200).json(new ApiResponse(200, true, 'success', getEncryptedStringFromObject(user)))
+    } catch (err) {
+
+    }
+}
+
+export const updateProfile = async (req, res) => {
+    try {
+        const userId = req.user._id;
+        const profilePic = req.file?.buffer;
+        if (!profilePic) {
+            return res.status(400).json({ message: "Profile pic is required" });
+        }
+        const updatedUser = await UserService.updateProfile(userId, profilePic);
+        if (!updateProfile)
+            return res.status(500).json(new ApiResponse(500, false, 'error while updating profile'))
+        return res.status(200).json(new ApiResponse(200, true, 'success', updatedUser));
+    } catch (error) {
+        console.log("error in update profile:", error);
+        return res.status(500).json(new ApiResponse(500, false, "Internal server error"));
+    }
+};
 
 export const logout = (req, res) => {
     try {

@@ -1,0 +1,1 @@
+export const DEFAULT_USER_PROFILE_PIC_MALE = "https://res.cloudinary.com/dqmxm5emd/image/upload/w_1000,c_fill,ar_1:1,g_auto,r_max,bo_5px_solid_red,b_rgb:262c35/v1739535424/chat-app/DefaultProfilePic/images_ttj5i7.png";
