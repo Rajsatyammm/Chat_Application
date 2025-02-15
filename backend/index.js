@@ -10,6 +10,7 @@ import { createServer } from 'http'
 import cors from 'cors';
 import socketRequestHandler from './socket.js';
 import ApiResponse from './utils/api.response.js';
+import helmet from 'helmet'
 
 config();
 cloudinaryConfig();
@@ -26,6 +27,7 @@ socketRequestHandler(io);
 
 app.use(cookieParser())
 app.use(express.json())
+app.use(helmet())
 app.use(cors({
     origin: process.env.FRONTEND_URL,
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
