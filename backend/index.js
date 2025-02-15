@@ -18,9 +18,14 @@ cloudinaryConfig();
 const app = express();
 const server = createServer(app);
 
+const originURL =
+  process.env.MODE == "development"
+    ? process.env.FRONTEND_URL_DEV
+    : process.env.FRONTEND_URL_PROD;
+
 const io = new Server(server, {
     cors: {
-        origin: [`${process.env.FRONTEND_URL}`]
+        origin: [originURL]
     }
 });
 socketRequestHandler(io);
@@ -29,7 +34,7 @@ app.use(cookieParser())
 app.use(express.json())
 app.use(helmet())
 app.use(cors({
-    origin: process.env.FRONTEND_URL,
+    origin: [originURL],
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     credentials: true
 }))
