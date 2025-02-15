@@ -39,6 +39,10 @@ app.get('/', (req, res) => {
     res.status(200).json(new ApiResponse(200, true, 'success'))
 })
 
+app.get('/health', (req, res) => {
+    res.status(200).json(new ApiResponse(200, true, 'server is up and running'))
+})
+
 const PORT = process.env.PORT || 4000;
 
 server.listen(PORT, async () => {
