@@ -22,7 +22,7 @@ export const useAuthStore = create((set, get) => ({
             set({ authUser: getDecryptedObjectFromEncryptedString(res.data.data) });
             get().connectSocket();
         } catch (error) {
-            toast.error(error?.message || "Error checking authentication");
+            console.log(error);
             set({ authUser: null });
         } finally {
             set({ isCheckingAuth: false });
@@ -48,9 +48,7 @@ export const useAuthStore = create((set, get) => ({
         try {
             const res = await axiosInstance.post("/auth/login", data);
             set({ authUser: getDecryptedObjectFromEncryptedString(res.data.data) });
-            console.log('login authUser', get().authUser)
             toast.success("Logged in successfully");
-
             get().connectSocket();
         } catch (error) {
             toast.error(error.response.data.message);
