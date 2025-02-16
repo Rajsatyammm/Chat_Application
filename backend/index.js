@@ -27,7 +27,6 @@ const io = new Server(server, {
     cors: {
         origin: [originURL],
         methods: ['GET', 'POST', 'PUT', 'DELETE'],
-        credentials: true
     }
 });
 socketRequestHandler(io);
@@ -37,8 +36,7 @@ app.use(express.json())
 app.use(helmet())
 app.use(cors({
     origin: [originURL],
-    methods: ['GET', 'POST', 'PUT', 'DELETE'],
-    credentials: true
+    methods: ['GET', 'POST', 'PUT', 'DELETE']
 }))
 
 app.use('/api/auth', authRouter)

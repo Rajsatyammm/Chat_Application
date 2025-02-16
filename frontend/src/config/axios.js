@@ -8,7 +8,9 @@ console.log(BASE_URL);
 
 const axiosInstance = axios.create({
     baseURL: `${BASE_URL}/api`,
-    withCredentials: true
+    headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`
+    }
 })
 
 export default axiosInstance;

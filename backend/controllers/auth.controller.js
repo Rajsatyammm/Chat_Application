@@ -26,7 +26,8 @@ export const login = async (req, res) => {
             firstName: user.firstName,
             lastName: user.lastName,
             email: user.email,
-            profilePic: user.profilePic
+            profilePic: user.profilePic,
+            token: token
         })
         return res.status(200).json(new ApiResponse(200, true, 'success', encryptedData))
     } catch (err) {
@@ -58,7 +59,8 @@ export const signUp = async (req, res) => {
             firstName: user.firstName,
             lastName: user.lastName,
             email: user.email,
-            profilePic: user.profilePic
+            profilePic: user.profilePic,
+            token: token
         })
         return res.status(200).json(new ApiResponse(200, true, 'success', encryptedUserData))
     } catch (err) {
@@ -97,11 +99,6 @@ export const updateProfile = async (req, res) => {
 
 export const logout = (req, res) => {
     try {
-        res.clearCookie("token", {
-          httpOnly: true,
-          secure: process.env.MODE !== "development",
-          sameSite: "none",
-        });
         return res.status(200).json(new ApiResponse(200, true, 'success'))
     } catch (err) {
         return res.status(500).json(new ApiResponse(500, false, err.message || 'server-error'))
