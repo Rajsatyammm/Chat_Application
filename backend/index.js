@@ -25,7 +25,9 @@ const originURL =
 
 const io = new Server(server, {
     cors: {
-        origin: [originURL]
+        origin: [originURL],
+        methods: ['GET', 'POST', 'PUT', 'DELETE'],
+        credentials: true
     }
 });
 socketRequestHandler(io);

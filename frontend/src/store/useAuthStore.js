@@ -3,10 +3,10 @@ import { create } from "zustand";
 import axiosInstance from "../config/axios";
 import toast from "react-hot-toast";
 import { io } from "socket.io-client";
-import { getDecryptedObjectFromEncryptedString, getEncryptedStringFromObject } from "../utils/util";
+import { getDecryptedObjectFromEncryptedString } from "../utils/util";
 
-// const BASE_URL = import.meta.env.MODE === "development" ? "http://localhost:5001" : "/";
 const BASE_URL = import.meta.env.VITE_SERVER_BASE_URL;
+
 export const useAuthStore = create((set, get) => ({
     authUser: null,
     isSigningUp: false,
@@ -22,6 +22,7 @@ export const useAuthStore = create((set, get) => ({
             set({ authUser: getDecryptedObjectFromEncryptedString(res.data.data) });
             get().connectSocket();
         } catch (error) {
+            toast.error(error?.message || "Error checking authentication");
             set({ authUser: null });
         } finally {
             set({ isCheckingAuth: false });
@@ -74,7 +75,7 @@ export const useAuthStore = create((set, get) => ({
             const response = await axiosInstance.get("/auth/profile")
             set({ authUser: getDecryptedObjectFromEncryptedString(response.data.data) })
         } catch (err) {
-            toast.error('Error getting user profile');
+            toast.error(err.message || 'Error getting user profile');
         }
     },
 
@@ -102,6 +103,8 @@ export const useAuthStore = create((set, get) => ({
             query: {
                 userId: authUser._id,
             },
+            transports: ["websocket"],
+            withCredentials: true,
         });
         socket.connect();
         set({ socket: socket });
